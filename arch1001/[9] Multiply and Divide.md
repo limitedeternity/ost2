@@ -22,7 +22,7 @@
    * rax = 0x1
 
 2. ```
-   mov ax, feh;
+   mov ax, 0feh;
    mov cx, 2h;
    idiv ax, cx;
    ```
