@@ -10,9 +10,9 @@
 > <…>
 > Any parameters beyond the first four must be stored on the stack after the shadow store before the call. 
 
-![TooManyParameters – Code](TooManyParameters – Code.png)
+![TooManyParameters-Code](TooManyParameters-Code.png)
 
-![TooManyParameters – Asm](TooManyParameters – Asm.png)
+![TooManyParameters-Asm](TooManyParameters-Asm.png)
 
 So, that `sub rsp, 38h` in main() comes from:
 
@@ -63,8 +63,9 @@ So, that `sub rsp, 38h` in main() comes from:
 * First 4 parameters (left-to-right) are put into RCX, RDX, R8, R9 respectively
 
 * Remaining parameters are “pushed” onto the stack so that the left-most parameter is at the lowest address
+
   * Typically “mov” is used instead of “push” though (to maintain stack alignment)
-  
+
 * Generally doesn’t use frame pointers for most of the code except for when `_alloca` is used:
 
   * > If space is dynamically allocated (`_alloca`) in a function, then a non-volatile register must be used as a frame pointer to mark the base of the fixed part of the stack and that register must be saved and initialized in the prolog.
@@ -75,7 +76,9 @@ So, that `sub rsp, 38h` in main() comes from:
 * Remaining parameters are pushed onto the stack from right to left (the left-most parameter ends up at the lowest address)
   * Typically “mov” is used instead of “push” though (to maintain stack alignment)
 * Uses frame pointers in 32-bit style, unless directed otherwise by compiler options:
-  * ![SystemV-RBP](SystemV-RBP.png)
+
+
+![SystemV-RBP](SystemV-RBP.png)
 
 ### x86 Stack Calling Conventions
 
