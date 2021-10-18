@@ -1,5 +1,6 @@
 global main
 
+
 section .text
 
 
@@ -57,27 +58,10 @@ main:
     test r8, r8              ; cpuid is available => 0, else => -1
     jnz cpuid_unavail_epilogue
 
-    test rdx, 10h            ; [bitwise AND] check msr feature flag
+    test rdx, 810h           ; [bitwise AND] check (msr | mtrr) feature flag
     jnz msr_avail_epilogue 
-                             ; [logical OR]
 
-    test rdx, 800h           ; [bitwise AND] mtrr feature flag => msr present
-    jnz msr_avail_epilogue
-
-    mov rbx, qword [rsp+28h]
-    mov rdx, qword [rsp+30h]
-    mov rcx, qword [rsp+38h]
-    mov rax, qword [rsp+40h]
-
-    mov rax, 2000004h        ; write syscall id on MacOS x64
-    mov rdi, 1               ; destination = stdout
-    lea rsi, [rel msr_unavail_msg]
-    mov rdx, msr_unavail_msg.len
-    syscall
-
-    add rsp, 48h
-    xor rax, rax             ; status = success
-    ret
+    jmp msr_unavail_epilogue
 
 cpuid_unavail_epilogue:
     mov rbx, qword [rsp+28h]
@@ -109,6 +93,22 @@ msr_avail_epilogue:
 
     add rsp, 48h
     xor rax, rax                ; status = success
+    ret
+
+msr_unavail_epilogue:
+    mov rbx, qword [rsp+28h]
+    mov rdx, qword [rsp+30h]
+    mov rcx, qword [rsp+38h]
+    mov rax, qword [rsp+40h]
+
+    mov rax, 2000004h        ; write syscall id on MacOS x64
+    mov rdi, 1               ; destination = stdout
+    lea rsi, [rel msr_unavail_msg]
+    mov rdx, msr_unavail_msg.len
+    syscall
+
+    add rsp, 48h
+    xor rax, rax             ; status = success
     ret
 
 
