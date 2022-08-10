@@ -138,7 +138,7 @@
 
 ### Interrupt Gate Descriptor
 
-![](file:///Users/limitedeternity/Downloads/ost2/arch2001/[5] Interrupts/IDTGateDescriptor.png)
+![](IDTGateDescriptor.png)
 
 * The DPL is only checked when a descriptor is accessed by a software interrupt and ignored on hardware interrupts
 
